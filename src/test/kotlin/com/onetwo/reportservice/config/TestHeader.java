@@ -1,9 +1,9 @@
 package com.onetwo.reportservice.config;
 
-import com.onetwo.likeservice.common.GlobalStatus;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import onetwo.mailboxcommonconfig.common.GlobalStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.http.HttpHeaders;

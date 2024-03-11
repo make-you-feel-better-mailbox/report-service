@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import onetwo.mailboxcommonconfig.common.domain.RoleNames;
 import onetwo.mailboxcommonconfig.common.filter.AccessKeyCheckFilter;
 import onetwo.mailboxcommonconfig.common.jwt.TokenProvider;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -17,9 +18,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 @TestConfiguration
 public class TestConfig {
@@ -79,5 +84,11 @@ public class TestConfig {
         public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
             filterChain.doFilter(request, response);
         }
+    }
+
+    public Set<GrantedAuthority> getGrantedAuthoritiesByUserId(String userId) {
+        Set<GrantedAuthority> authorities = new HashSet();
+        authorities.add(new SimpleGrantedAuthority(RoleNames.ROLE_USER.getValue()));
+        return authorities;
     }
 }

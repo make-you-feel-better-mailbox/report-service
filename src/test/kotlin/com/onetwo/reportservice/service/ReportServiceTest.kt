@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers.*
+import org.mockito.ArgumentMatchers.any
 import org.mockito.BDDMockito.given
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -24,7 +24,7 @@ import java.util.*
 class ReportServiceTest {
 
     @InjectMocks
-    private var reportService: ReportService? = null
+    private var reportService: ReportServiceImpl? = null
 
     @Mock
     private var reportRepository: ReportRepository? = null
@@ -45,7 +45,7 @@ class ReportServiceTest {
 
         report.id = 1L
 
-        given(reportRepository!!.findByUserIdAndCategoryAndTargetIdAndState(anyString(), anyInt(), anyLong(), GlobalStatus.PERSISTENCE_NOT_DELETED))
+        given(reportRepository!!.findByUserIdAndCategoryAndTargetIdAndState(userId, category, targetId, GlobalStatus.PERSISTENCE_NOT_DELETED))
                 .willReturn(Optional.empty())
         given(reportRepository!!.save(any(ReportEntity::class.java)))
                 .willReturn(report)
@@ -68,7 +68,7 @@ class ReportServiceTest {
 
         report.id = 1L
 
-        given(reportRepository!!.findByUserIdAndCategoryAndTargetIdAndState(anyString(), anyInt(), anyLong(), GlobalStatus.PERSISTENCE_NOT_DELETED))
+        given(reportRepository!!.findByUserIdAndCategoryAndTargetIdAndState(userId, category, targetId, GlobalStatus.PERSISTENCE_NOT_DELETED))
                 .willReturn(Optional.of(report))
 
         //when then
@@ -83,7 +83,7 @@ class ReportServiceTest {
 
         report.id = 1L
 
-        given(reportRepository!!.findByUserIdAndCategoryAndTargetIdAndState(anyString(), anyInt(), anyLong(), GlobalStatus.PERSISTENCE_NOT_DELETED))
+        given(reportRepository!!.findByUserIdAndCategoryAndTargetIdAndState(userId, category, targetId, GlobalStatus.PERSISTENCE_NOT_DELETED))
                 .willReturn(Optional.of(report))
 
         //when
@@ -98,7 +98,7 @@ class ReportServiceTest {
     @DisplayName("[단위][Service] Report 삭제 미존재 - 실패 테스트")
     fun deleteReportDoesNotExistFailTest() {
         //given
-        given(reportRepository!!.findByUserIdAndCategoryAndTargetIdAndState(anyString(), anyInt(), anyLong(), GlobalStatus.PERSISTENCE_NOT_DELETED))
+        given(reportRepository!!.findByUserIdAndCategoryAndTargetIdAndState(userId, category, targetId, GlobalStatus.PERSISTENCE_NOT_DELETED))
                 .willReturn(Optional.empty())
 
         //when then
