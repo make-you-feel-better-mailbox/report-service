@@ -1,0 +1,30 @@
+= Report Service API Document
+:doctype: book
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:seclinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+[[common]]
+= 개발 환경 정보
+
+// 표(table)를 구성할떄 아래와 같이 구성하면 된다.
+|===
+|환경|url
+
+|테스트
+|`http://127.0.0.1`
+
+|운영서버
+|`http://127.0.0.1`
+|===
+//표(table)의 설정 끝.
+
+[[Report-Service-API]]
+== 1. Report
+
+=== Register Report

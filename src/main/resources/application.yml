@@ -1,0 +1,13 @@
+spring:
+  config:
+    import: configserver:http://127.0.0.1:8888
+  cloud:
+    config:
+      name: report-service
+      profile: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
