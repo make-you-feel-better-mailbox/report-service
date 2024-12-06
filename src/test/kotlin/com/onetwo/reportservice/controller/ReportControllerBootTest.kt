@@ -3,14 +3,13 @@ package com.onetwo.reportservice.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.onetwo.reportservice.common.GlobalURI
 import com.onetwo.reportservice.config.TestHeader
-import com.onetwo.reportservice.dto.DeleteReportResponse
 import com.onetwo.reportservice.dto.RegisterReportRequest
-import com.onetwo.reportservice.service.ReportService
+import com.onetwo.reportservice.persistence.entity.ReportEntity
+import com.onetwo.reportservice.persistence.repository.ReportRepository
 import onetwo.mailboxcommonconfig.common.GlobalStatus
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.*
-import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -30,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -43,7 +43,7 @@ class ReportControllerBootTest {
     private val objectMapper: ObjectMapper? = null
 
     @Autowired
-    private val reportService: ReportService? = null
+    private val reportRepository: ReportRepository? = null
 
     @Autowired
     private val testHeader: TestHeader? = null
@@ -83,7 +83,7 @@ class ReportControllerBootTest {
                                 fieldWithPath("reason").type(JsonFieldType.STRING).description("report를 등록할 이유")
                         ),
                         responseFields(
-                                fieldWithPath("isRegisterSuccess").type(JsonFieldType.BOOLEAN).description("등록 완료 여부")
+                                fieldWithPath("registerSuccess").type(JsonFieldType.BOOLEAN).description("등록 완료 여부")
                         )
                 )
                 )
@@ -95,9 +95,10 @@ class ReportControllerBootTest {
     @Throws(Exception::class)
     fun deleteReportSuccessTest() {
         //given
-        val deleteReportResponse: DeleteReportResponse = DeleteReportResponse(true)
+        val report: ReportEntity = ReportEntity(userId, category, targetId, reason, false, Instant.now(), userId)
 
-        Mockito.`when`(reportService!!.deleteReport(anyInt(), anyLong(), anyString())).thenReturn(deleteReportResponse)
+        reportRepository!!.save(report)
+
         //when
         val resultActions = mockMvc!!.perform(
                 RestDocumentationRequestBuilders.delete("${GlobalURI.REPORT_ROOT}${GlobalURI.PATH_VARIABLE_CATEGORY_WITH_BRACE}${GlobalURI.PATH_VARIABLE_TARGET_ID_WITH_BRACE}",
@@ -119,7 +120,7 @@ class ReportControllerBootTest {
                                 parameterWithName(GlobalURI.PATH_VARIABLE_TARGET_ID).description("삭제할 Report의 target id")
                         ),
                         responseFields(
-                                fieldWithPath("isDeleteSuccess").type(JsonFieldType.BOOLEAN).description("삭제 성공 여부")
+                                fieldWithPath("deleteSuccess").type(JsonFieldType.BOOLEAN).description("삭제 성공 여부")
                         )
                 )
                 )
